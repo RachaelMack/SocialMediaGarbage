@@ -16,46 +16,78 @@
     <!-- load jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    
+    <!-- file upload -->
+    <script src="/assets/ng-file-upload-shim/ng-file-upload-shim.min.js"></script> <!-- for no html5 browsers support -->
+    <script src="/assets/ng-file-upload/ng-file-upload.min.js"></script>
+        
 </head>
 <body>
+  <div class="container-fluid" ng-controller='browseController'>
+    <div class="container">
     <%- include nav.ejs %>
-
-<div class="container" ng-controller='browseController'>
-
-    <div>
-        <h1>Browse View</h1>
-    </div>
-
-    <div class="row" ng-init="loadPosts()">
-
-        <div ng-repeat="post in posts">
-
-            <div class="panel panel-success">
-              <div class="panel-heading"><strong>Title:</strong> {{post.title}}</div>
-
-              <div class="panel-body">
-                <span class="glyphicon glyphicon-tags"></span> <strong>Tags:</strong> {{post.hashtag}}
-              </div>
-
-              <div class="panel-body">
-                <strong>Address:</strong> {{post.address}}
-              </div>
+  </div>
+  <div class="container browseContainer">
+      <h1>Browse</h1>
+    <div class="row">
+      <div class="container" ng-init="loadPosts()">
+        <div class="col-md-3" ng-repeat="post in posts">
+          
+          <div class="browseItem">
+            <div>
+              <img class="browseImage" src="assets/uploads/{{post.photo}}"> </img>
+            </div>  
+            <div class="browseHashTag">
+                <span class="glyphicon glyphicon-tags"></span>
+                {{post.hashtag}}
             </div>
 
-        </div>
+            <div class="browseTitle">
+                <strong>{{post.title}}</strong>
+            </div>
+              <div class="browseAddress">
+                {{post.address}}
+               </div>
+          </div>
 
+      </div>
+      </div>
     </div>
-                
-</div>
-
+  <%- include logModal.ejs %>
+  <%- include signModal.ejs %>
+  </div>
   <script src="../assets/scripts/app.js"></script>
   <script src="../assets/scripts/controllers/browseController.js"></script>
   <script src="../assets/scripts/controllers/navController.js"></script>
-  <%- include logModal.ejs %>
-<%- include signModal.ejs %>
-
+  
 </body>
 </html>
+
+<!--
+    <div class="container postContainer">
+    <h1>Browse</h1>
+    <div class="row">
+      <div class="container">
+        <div class="row">
+          <div class="container postBrowseContainer" ng-init="loadPosts()">
+            <div ng-repeat="post in posts">
+              <div class="panel panel-success">
+                <div class="panel-heading browsePostTitle">
+                  <strong>TITLE:</strong> {{post.title}}
+                </div>
+                <div class="panel-body">
+                  <span class="glyphicon glyphicon-tags"></span> 
+                  <strong>Tags:</strong> {{post.hashtag}}
+                </div>
+                <div class="panel-body">
+                  <strong>Address:</strong> {{post.address}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  -->

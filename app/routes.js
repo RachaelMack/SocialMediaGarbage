@@ -1,4 +1,16 @@
 var Post = require('./models/posts.js');
+
+// REQUIRED FOR IMAGE UPLOAD
+var multer = require('multer');
+var fs = require('fs');
+var path = require('path');
+var options = multer.diskStorage({ destination : 'assets/uploads/' ,
+  filename: function (req, file, cb) {
+    cb(null, (Math.random().toString(36)+'00000000000000000').slice(2, 10) + Date.now() + path.extname(file.originalname));
+  }
+});
+var upload = multer({ storage: options });
+
 module.exports = function(app, passport) {
 
 // normal routes ===============================================================
@@ -39,7 +51,7 @@ module.exports = function(app, passport) {
         res.render('nav.ejs');
         user : req.user
     });
-
+     
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -154,31 +166,29 @@ module.exports = function(app, passport) {
         res.render('post.ejs');
         });
 
-        app.post('/api/post', isApiLoggedIn, function(req, res) {
+    app.post('/api/post', isApiLoggedIn, upload.single('file'), function(req, res) {
 
-            var newPost = new Post();
-            // newPost._creator = req.session.user._id;
-            newPost.title = req.param('title');
-            newPost.hashtag = req.param('hashtag');
-            newPost.address = req.param('address');
+    // var newPost = new Post();
+        Post.create({
+           title : req.body.info.title,
+           hashtag : req.body.info.hashtag,
+           address: req.body.info.address,
+           photo: req.file.filename,
+            done : false
+        }, function(err, todo) {
+            if (err)
+                res.send(err);
+        });
 
-            newPost.save (function(err) {
-                        if (err)
-                        throw err;
+        
 
-                    var returnJson = {};
-                    returnJson.status = "success";
-                    return res.json(returnJson);
-                        
-                            });
+    });
 
-                });
-
-        app.get('/api/post', function(req, res) {
+    app.get('/api/post', function(req, res) {
             Post.find({}, function(err, posts){
                 return res.json(posts);
             })
-        })
+        });
 // =============================================================================
 // UNLINK ACCOUNTS =============================================================
 // =============================================================================
