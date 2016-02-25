@@ -39,6 +39,7 @@ angular.module('hgtApp').controller('postController', ['$scope', '$http', '$time
         file.upload.then(function (response) {
           $timeout(function () {
             $scope.posts = response.data;
+
           });
         }, function (response) {
           if (response.status > 0)
@@ -51,6 +52,8 @@ angular.module('hgtApp').controller('postController', ['$scope', '$http', '$time
         file.upload.xhr(function (xhr) {
           // xhr.upload.addEventListener('abort', function(){console.log('abort complete')}, false);
         });
+        $scope.newPost = null;
+        $scope.picFile = null;
     };
 
     // $scope.formUpload.$setPristine();
